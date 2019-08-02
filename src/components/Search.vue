@@ -179,7 +179,7 @@ se
 				if (this.filter != "all" && this.filter != ""){
 					params['entity'] = `${this.filter}`;
 				}
-				localStorage.setItem('settings', this.settings);
+				localStorage.setItem('settings', JSON.stringify(this.settings));
 				itunessearchapi(params)
 					.then((response) => {
 						let data = response.results.sort((a, b) => a.releaseDate > b.releaseDate ? -1 : 1);
