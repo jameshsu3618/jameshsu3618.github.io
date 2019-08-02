@@ -123,9 +123,11 @@ export default {
 	.v-icon.favorited{
 		color: pink !important;
 	}
-	.tile-card:hover {
-		-webkit-transform: scale(1.12, 1.12);
-		transform: scale(1.12, 1.12);
+	@media screen and (min-width: 800px) {
+		.tile-card:hover {
+			-webkit-transform: scale(1.12, 1.12);
+			transform: scale(1.12, 1.12);
+		}
 	}
 
 	.tile-card {
