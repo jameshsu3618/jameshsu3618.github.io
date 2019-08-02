@@ -1,7 +1,7 @@
 <template>
 	<v-card-text v-if="data.length">
 		<v-layout row wrap justify-center v-for="i in 13">
-			<div class="category" :key="numMatched" v-if="filtersMatch[i-1]"><h4 class="category-title">{{kinds[i-1]}}</h4></div>
+			<div class="category" v-if="filterData(data,i)[0]"><h4 class="category-title">{{kinds[i-1]}}</h4></div>
 			<div
 				class="shadow text-xs-center my-3 mx-3 tile-card"
 				v-for="tile in filterData(data,i)"
@@ -32,27 +32,19 @@ export default {
 	props: ['data', 'favoriteList'],
 	data: function(){
 		return {
-			filtersMatch: [false,false, false, false, false, false, false, false, false, false, false, false],
 			kinds: ['artist', 'collection', 'book', 'album', 'coached-audio', 'feature-movie', 'interactive- booklet', 'music-video', 'podcast', 'podcast-episode', 'software-package', 'song', 'tv- episode'],
 			favLength: Object.keys(this.favoriteList).length,
-			numMatched: 0,
 		}
 	},
 	methods:{
 		filterData(data, index){
 			let kind = this.kinds[index-1];
-			if (index < 2){
-				if (data.filter(function(t) {return t.wrapperType == kind;})[0]){
-					this.filtersMatch[index-1] = true;
-				}
+			if (index < 3){
 				return data.filter(function(t) {
          			return t.wrapperType == kind;
     		 })
 			}
 			else{
-				if (data.filter(function(t) {return t.kind == kind;})[0]){
-					this.filtersMatch[index-1] = true;
-				}
 				return data.filter(function(t) {
          			return t.kind == kind;
     			})
