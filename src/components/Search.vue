@@ -1,4 +1,4 @@
-
+se
 <template>
 	<v-flex>
 		<v-card>
@@ -106,7 +106,7 @@
 				search: '',
 				filter: '',
 				filtered: [false, false, false, false, false],
-				settings: localStorage.getItem('settings')? JSON.parse(localStorage.getItem('favoriteList')): {'country': 'US', 'numResults': 50,'btnColor':'pink'},
+				settings: localStorage.getItem('settings')? JSON.parse(localStorage.getItem('settings')): {'country': 'US', 'numResults': 50,'btnColor':'pink'},
 			}
 		},
 		watch: {
@@ -179,7 +179,7 @@
 				if (this.filter != "all" && this.filter != ""){
 					params['entity'] = `${this.filter}`;
 				}
-
+				localStorage.setItem('settings', this.settings);
 				itunessearchapi(params)
 					.then((response) => {
 						let data = response.results.sort((a, b) => a.releaseDate > b.releaseDate ? -1 : 1);
