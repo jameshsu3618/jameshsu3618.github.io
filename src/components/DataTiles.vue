@@ -4,8 +4,7 @@
 			<div class="category" :key="numMatched" v-if="filtersMatch[i-1]"><h4 class="category-title">{{kinds[i-1]}}</h4></div>
 			<div
 				class="shadow text-xs-center my-3 mx-3 tile-card"
-				v-for="(tile, index) in filterData(data, i-1)"
-				:key="index"
+				v-for="tile in filterData(data,i)"
 			>
 				<v-avatar
 					:tile="true"
@@ -21,7 +20,7 @@
 					<div class="text--lighten-1 grey--text">{{ tile.artistName}}</div>
 					<div class="grey--text">{{ getReleaseYear(tile) }}</div>
 					<div class="grey--text">{{ getGenre(tile) }}</div>
-					<v-icon :class="{favorited: isFav(tile),'favorite-btn': true}" :key="favLength" v-on:click="favorite(tile, index)" >favorite</v-icon>
+					<v-icon :class="{favorited: isFav(tile),'favorite-btn': true}" :key="favLength" v-on:click="favorite(tile)" >favorite</v-icon>
 				</v-flex>
 			</div>
 
@@ -41,29 +40,23 @@ export default {
 	},
 	methods:{
 		filterData(data, index){
-			let tempData = this.data;
-			let kind = this.kinds[index];
-			let filteredDatas = {};
+			let kind = this.kinds[index-1];
 			if (index < 2){
-				filteredDatas = tempData.filter(function(t) {
-         		return t.wrapperType == kind;
-    		 })
-			}else{
-				filteredDatas = tempData.filter(function(t) {
-         		return t.kind == kind;
+				if (data.filter(function(t) {return t.wrapperType == kind;})[0]){
+					this.filtersMatch[index-1] = true;
+				}
+				return data.filter(function(t) {
+         			return t.wrapperType == kind;
     		 })
 			}
-   			if (filteredDatas[0]){
-   				this.filtersMatch[index] = true;
-   				this.numMatched += 1;
-   			}else
-   			{
-   				if (this.filtersMatch[index]){
-   					this.numMatched -= 1;
-   				}
-   				this.filtersMatch[index] = false;
-   			}
-   			return filteredDatas;
+			else{
+				if (data.filter(function(t) {return t.kind == kind;})[0]){
+					this.filtersMatch[index-1] = true;
+				}
+				return data.filter(function(t) {
+         			return t.kind == kind;
+    			})
+    		}
 		},
 		isFav(data){
 			return this.isInFavList(data);
@@ -76,7 +69,7 @@ export default {
 			let favList = JSON.stringify(this.favoriteList);
 			localStorage.setItem('favoriteList', favList);
 		},
-		favorite (data, index){
+		favorite (data){
 			let url = data.collectionViewUrl;
 			if (this.isInFavList(data)){
 				delete this.favoriteList[url];
