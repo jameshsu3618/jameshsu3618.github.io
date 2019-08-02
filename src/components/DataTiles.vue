@@ -54,7 +54,13 @@ export default {
 			return this.isInFavList(data);
 		},
 		isInFavList(data){
-			let isInFavList = data.collectionViewUrl in this.favoriteList;
+			let url = "";
+			if (data.collectionViewUrl == undefined){
+				url = data.artistLinkUrl != undefined? data.artistLinkUrl : data.previewUrl;
+			}else{
+				url = data.collectionViewUrl;
+			}
+			let isInFavList = url in this.favoriteList;
 			return isInFavList;
 		},
 		updateFavStore(){
@@ -62,7 +68,12 @@ export default {
 			localStorage.setItem('favoriteList', favList);
 		},
 		favorite (data){
-			let url = data.collectionViewUrl;
+			let url = "";
+			if (data.collectionViewUrl == undefined){
+				url = data.artistLinkUrl != undefined? data.artistLinkUrl : data.previewUrl;
+			}else{
+				url = data.collectionViewUrl;
+			}
 			if (this.isInFavList(data)){
 				delete this.favoriteList[url];
 				this.updateFavStore();
